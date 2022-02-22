@@ -24,7 +24,7 @@ const HomePage = () => {
       params: {
         requestType:sortType,
         page: router.query.pagee ? router.query.pagee : 1,
-        size: 2
+        size: 15
       }
     }
     const fetchQuestion = async () => {
@@ -32,7 +32,6 @@ const HomePage = () => {
       setQuestions(data.data.data)
       setTotalPage(data.data.pageNum)
       setCurrentPage(data.data.currentPage)
- 
     }
 
     const fetchQuestionByWord = async () => {

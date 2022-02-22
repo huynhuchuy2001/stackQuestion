@@ -98,8 +98,9 @@ a {
 .pagein_body {
   display: flex;
 
-  justify-content: center;
-  margin-top: 10px;
+  justify-content: left;
+  margin-top: 30px;
+  margin-left: 10px;
 }
 .inside {
   display: flex;
@@ -109,11 +110,11 @@ a {
   font-size: 14px;
 }
 .inside i {
-  padding: 0 10px;
-  border: none;
+  padding: 0 8px;
+  border: 1px solid #D0D3D4;
   line-height: 33px;
-  background: black;
-  color: white;
+  
+  color: black;
   cursor: pointer;
   border-radius: 8px;
 }
