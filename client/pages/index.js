@@ -11,7 +11,7 @@ import QuestionSummary from '../components/question/question-summary'
 import PageTitle from '../components/page-title'
 import ButtonGroup from '../components/button-group'
 import { Spinner } from '../components/icons'
-
+import Panginations from '../components/pangination'
 const HomePage = () => {
   const router = useRouter()
 
@@ -19,7 +19,6 @@ const HomePage = () => {
   const [sortType, setSortType] = useState('Votes')
   const [totalPage, setTotalPage] = useState(0)
   const [currentPage, setCurrentPage] = useState(1);
-  const range = 5;
   useEffect(() => {
     var request = {
       params: {
@@ -75,62 +74,7 @@ const HomePage = () => {
     }
   } */
   
-  const handlePage = async (e) => {
 
-    const currentPath = router.pathname;
-    const currentQuery = router.query;
-
-    currentQuery.pagee = e;
-    router.push({
-      pathname: currentPath,
-      query: currentQuery
-    })
-  }
-  
-  const handleChangePage = async (e) => {
-    const i = Number(e.target.attributes.num.value);
-    const currentPath = router.pathname;
-    const currentQuery = router.query;
-
-    currentQuery.pagee = i === 1 ? currentPage - 1 : currentPage + 1;
-    router.push({
-      pathname: currentPath,
-      query: currentQuery
-    })
-  }
-
-  const showPagination = (e) => {
-
-    var page = [];
-    var result = '';
-    var start = 1;
-    var end = range;
-   
-      if(currentPage > range){    
-          if(currentPage + 2 < totalPage ){
-            start = currentPage - 2;
-            end = currentPage + 2;
-          }else{
-            start = totalPage - 3;
-            end = totalPage;
-          }
-         
-      }
-      console.log(start)
-      for (let i = start; i <= end; i++) {    
-        page.push(Number(i))
-      }
-    
-    
-    
-   
-    result = page.length > 0 ? page.map((item, index) => {
-
-      return <li key={index} className={currentPage > range ? currentPage - 2 + index === currentPage ? 'hightLight' : '' : index + 1 === currentPage ? 'hightLight' : ''} onClick={() => {handlePage(currentPage > range ? currentPage - 2 + index : index + 1 )}}>{item}</li>
-    })
-      : '';
-    return result;
-  }
   return (
     <Layout>
       <Head>
@@ -188,38 +132,8 @@ const HomePage = () => {
             </QuestionWrapper>
           )
         ): ''}
-      { totalPage > 1 ?
-        <div className="pagein_body">
-          <div className="inside">
-            {
-              currentPage === 1 || currentPage === 0 ? '' : <i className='bx bxs-left-arrow' num="1" onClick={handleChangePage}></i>
-            }
-            {
-               currentPage - 2 > 2  ? <span className='more_page' onClick={() => handlePage(1)}>1</span>:''
-            }
-            {
-               currentPage - 2 > 2 ? <span className='more_page'>...</span>:''
-            }
-            <ul className="paginationBttns">
-              {
-                showPagination(totalPage)
-              }
-            </ul>
-            {
-               currentPage + 2 < totalPage ? <span className='more_page'>...</span>:''
-            }
-            {
-               currentPage + 2 < totalPage ? <span className='totalPage more_page' onClick={() => handlePage(totalPage)}>{totalPage}</span>:''
-            }
-            {            
-              currentPage === totalPage || totalPage === 0 ? '' : <i className='bx bxs-right-arrow' num="2" onClick={handleChangePage}></i>
-            }
-
-          </div>
-        </div>
-        :
-        ''
-      }
+   
+      <Panginations currentPage={currentPage} totalPage={totalPage} />
 
     </Layout>
   )
