@@ -47,6 +47,7 @@ exports.listTags = async (req, res, next) => {
 
 exports.searchTags = async (req, res, next) => {
   const { tag = '' } = req.params;
+  const { page, size } = req.query;
   try {
     const tags = await Question.aggregate([
       { $project: { tags: 1 } },
@@ -55,7 +56,12 @@ exports.searchTags = async (req, res, next) => {
       { $match: { _id: { $regex: tag, $options: 'i' } } },
       { $sort: { count: -1 } }
     ]);
-    res.json(tags);
+    const { dataInPer, pagePer } = getPagination(page, size, tags);
+    res.json({
+      currentPage: Number(page),
+      pageNum: pagePer,
+      tag: dataInPer
+    });
   } catch (error) {
     next(error);
   }

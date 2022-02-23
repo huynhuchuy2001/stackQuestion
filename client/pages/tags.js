@@ -26,21 +26,22 @@ function TagsPage() {
     }
     if (searchTerm === null) {
       const fetchUser = async () => {
-        const { data } = await publicFetch.get('/tags',request)
+        const { data } = await publicFetch.get('/tags')
         setTags(data.tag)
         setTotalPage(data.pageNum)  
         setCurrentPage(data.currentPage)
         console.log(data.pageNum)
       }
-
       fetchUser()
     } else {
       const delayDebounceFn = setTimeout(async () => {
         setLoading(true)
         const { data } = await publicFetch.get(
-          searchTerm ? `/tags/${searchTerm}` : `/tags`
+          searchTerm ? `/tags/${searchTerm}` : `/tags`,request
         )
-        setTags(data)
+        setTags(data.tag)
+        setTotalPage(data.pageNum)  
+        setCurrentPage(data.currentPage)
         setLoading(false)
       }, 500)
 

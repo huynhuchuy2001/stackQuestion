@@ -3,23 +3,37 @@ import Head from 'next/head'
 
 import { publicFetch } from '../../util/fetcher'
 
+import { useRouter } from 'next/router';
 import Layout from '../../components/layout'
 import PageTitle from '../../components/page-title'
 import SearchInput from '../../components/search-input'
 import UserList from '../../components/user-list'
 import UserItem from '../../components/user-list/user-item'
 import { Spinner } from '../../components/icons'
-
+import Panginations from '../../components/pangination'
 function UsersPage() {
+  const router = useRouter();
+
   const [searchTerm, setSearchTerm] = useState(null)
   const [users, setUsers] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [totalPage, setTotalPage] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
+    var request = {
+      params: {
+        page: router.query.pagee ? router.query.pagee : 1,
+        size: 1
+      }
+    }
     if (searchTerm === null) {
       const fetchUser = async () => {
-        const { data } = await publicFetch.get('/users')
-        setUsers(data)
+        const { data } = await publicFetch.get('/users',request)
+        setUsers(data.user)
+        setTotalPage(data.pageNum)  
+        setCurrentPage(data.currentPage)
+       
       }
 
       fetchUser()
@@ -35,7 +49,7 @@ function UsersPage() {
 
       return () => clearTimeout(delayDebounceFn)
     }
-  }, [searchTerm])
+  }, [searchTerm,router.query.pagee])
 
   return (
     <Layout extra={false}>
@@ -78,6 +92,7 @@ function UsersPage() {
           )}
         </>
       )}
+        <Panginations currentPage={currentPage} totalPage={totalPage} />
     </Layout>
   )
 }
