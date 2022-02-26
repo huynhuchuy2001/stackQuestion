@@ -26,7 +26,7 @@ function TagsPage() {
     }
     if (searchTerm === null) {
       const fetchUser = async () => {
-        const { data } = await publicFetch.get('/tags',request)
+        const { data } = await publicFetch.get('/tags')
         setTags(data.tag)
         setTotalPage(data.pageNum)  
         setCurrentPage(data.currentPage)

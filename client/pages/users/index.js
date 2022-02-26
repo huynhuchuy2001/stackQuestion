@@ -24,7 +24,7 @@ function UsersPage() {
     var request = {
       params: {
         page: router.query.pagee ? router.query.pagee : 1,
-        size: 30
+        size: 30   
       }
     }
     if (searchTerm === null) {
