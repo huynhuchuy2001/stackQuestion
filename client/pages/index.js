@@ -16,7 +16,7 @@ const HomePage = () => {
   const router = useRouter()
 
   const [questions, setQuestions] = useState(null)
-  const [sortType, setSortType] = useState('Votes')
+  const [sortType, setSortType] = useState('Newest')
   const [totalPage, setTotalPage] = useState(0)
   const [currentPage, setCurrentPage] = useState(1);
   useEffect(() => {
@@ -28,15 +28,18 @@ const HomePage = () => {
       }
     }
     const fetchQuestion = async () => {
-      const data = await publicFetch.get('/question', request)
-      setQuestions(data.data.data)
-      setTotalPage(data.data.pageNum)
-      setCurrentPage(data.data.currentPage)
+      const {data} = await publicFetch.get('/question', request)
+      setQuestions(data.data)
+      setTotalPage(data.pageNum)
+      setCurrentPage(data.currentPage)
     }
 
     const fetchQuestionByWord = async () => {
       const { data } = await publicFetch.get(`/question/find/${router.query.keyWord}`)
-      setQuestions(data)
+      setQuestions(data.data)
+      setTotalPage(data.pageNum)
+      setCurrentPage(data.currentPage)
+  
     }
     const fetchQuestionByTag = async () => {
       const { data } = await publicFetch.get(`/questions/${router.query.tag}`)
@@ -88,7 +91,7 @@ const HomePage = () => {
 
       <ButtonGroup
         borderBottom
-        buttons={['Votes', 'Views', 'Newest', 'Oldest']}
+        buttons={['Newest', 'Views', 'Votes', 'Oldest']}
         selected={sortType}
         setSelected={setSortType}
       />

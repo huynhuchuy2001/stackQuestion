@@ -21,7 +21,7 @@ function TagsPage() {
     var request = {
       params: {
         page: router.query.pagee ? router.query.pagee : 1,
-        size: 50
+        size: 30
       }
     }
     if (searchTerm === null) {
@@ -32,15 +32,16 @@ function TagsPage() {
         setCurrentPage(data.currentPage)
         console.log(data.pageNum)
       }
-
       fetchUser()
     } else {
       const delayDebounceFn = setTimeout(async () => {
         setLoading(true)
         const { data } = await publicFetch.get(
-          searchTerm ? `/tags/${searchTerm}` : `/tags`
+          searchTerm ? `/tags/${searchTerm}` : `/tags`,request
         )
-        setTags(data)
+        setTags(data.tag)
+        setTotalPage(data.pageNum)  
+        setCurrentPage(data.currentPage)
         setLoading(false)
       }, 500)
 

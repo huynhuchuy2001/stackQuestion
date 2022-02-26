@@ -1,7 +1,8 @@
 const Question = require('../models/question');
 const User = require('../models/user');
 const { body, validationResult } = require('express-validator');
-
+const fullTextSearch = require('fulltextsearch');
+var fullTextSearchVi = fullTextSearch.vi;
 const getPagination = (page, size, data) => {
 
   const start = page ? + (page - 1) * size : 0;
@@ -62,16 +63,14 @@ exports.show = async (req, res, next) => {
 
 exports.listQuestions = async (req, res, next) => {
   try {
-    const { sortType = '-score' } = req.body;
+    const { sortType = '-created' } = req.body;
     const { page, size,requestType } = req.query;
     
     if(requestType){
       switch (requestType) {
-        case 'Newest':
+        case 'Votes':
           {
-          
-           
-            const questions = await Question.find().sort('-created');
+            const questions = await Question.find().sort('-score');
                 const { dataInPer, pagePer } = getPagination(page, size, questions);
                 return  res.json({
                   currentPage: Number(page),
@@ -183,11 +182,53 @@ exports.loadComment = async (req, res, next, id) => {
 exports.findQuestion = async (req, res, next) => {
   try {
     const keyWord = await req.params.keyWord;
+    const { page, size } = req.query;
+  
+   /*  if (req.query.screen_name != '') {
+        filter.screen_name = new RegExp(req.query.screen_name, "i");
+    }
+    if (req.query.location != '') {
+        filter.location = new RegExp(fullTextSearchVi(req.query.location), "i");
+    }
+    if (req.query.status != '') {
+        filter.description = new RegExp(fullTextSearchVi(req.query.description), "i");
+    } */
+
+ /*  const as = await  Question.find(filter) *//* .toArray(function (err, result) {
+        if (err != null) {
+            req.flash('danger', err.message);
+        }
+        console.log(result)
+         res.setHeader('Content-Type', 'application/json');
+         return res.status(200).json({data: result});      
+    }); */
+    //
     if (keyWord) {
-      Question.find({ title: { $regex: keyWord } })
-        .then((result) => {
-          return res.status(200).json(result);
-        })
+      var filter = {};
+      var f = {};   
+        filter.title = new RegExp(fullTextSearchVi(keyWord), "i")  
+        f.text = new RegExp(fullTextSearchVi(keyWord), "i")  
+       
+   /*   const questions = await Question.find({"title": new RegExp('.*' + keyWord + '.*')}) */
+     const questions = await  Question.find(filter)
+     const question = await  Question.find(f);
+     if(questions.length == 0){
+      const { dataInPer, pagePer } = getPagination(page, size, question);
+      return res.status(200).json({
+        currentPage: Number(page),
+        pageNum: pagePer,
+        data: dataInPer
+      });
+     }else{
+      const { dataInPer, pagePer } = getPagination(page, size, questions);
+      return res.status(200).json({
+        currentPage: Number(page),
+        pageNum: pagePer,
+        data: dataInPer
+      });
+     }
+     
+       
     }
   } catch (error) {
     return next(error);

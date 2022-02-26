@@ -4,8 +4,18 @@ const { body, validationResult } = require('express-validator');
 
 const { createToken, hashPassword, verifyPassword } = require('../utils/authentication');
 
+
+const getPagination = (page, size, data) => {
+  const start = page ? + (page - 1) * size : 0;
+  const end = size ? page * size : 10;
+  const dataInPer = data.slice(start, end);
+  const pagePer = Math.ceil(data.length / size);
+  return { dataInPer, pagePer };
+};
+
 exports.signup = async (req, res) => {
   const result = validationResult(req);
+  
   if (!result.isEmpty()) {
     const errors = result.array({ onlyFirstError: true });
     return res.status(422).json({ errors });
@@ -115,7 +125,13 @@ exports.listUsers = async (req, res, next) => {
   try {
     const { sortType = '-created' } = req.body;
     const users = await User.find().sort(sortType);
-    res.json(users);
+    const { page, size } = req.query;
+    const { dataInPer, pagePer } = getPagination(page, size, users);
+        res.json({
+          currentPage: Number(page),
+          pageNum: pagePer,
+          user: dataInPer
+        });
   } catch (error) {
     next(error);
   }
@@ -124,7 +140,13 @@ exports.listUsers = async (req, res, next) => {
 exports.search = async (req, res, next) => {
   try {
     const users = await User.find({ username: { $regex: req.params.search, $options: 'i' } });
-    res.json(users);
+    const { page, size } = req.query;
+    const { dataInPer, pagePer } = getPagination(page, size, users);
+    res.json({
+      currentPage: Number(page),
+      pageNum: pagePer,
+      user: dataInPer
+    });
   } catch (error) {
     next(error);
   }

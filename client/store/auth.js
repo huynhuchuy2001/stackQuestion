@@ -1,9 +1,10 @@
 import React, { createContext, useState, useEffect } from 'react'
-
+import { useRouter } from 'next/router'
 const AuthContext = createContext()
 const { Provider } = AuthContext
 
 const AuthProvider = ({ children }) => {
+  const router = useRouter();
   const [authState, setAuthState] = useState({})
 
   useEffect(() => {
@@ -35,6 +36,7 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem('userInfo')
     localStorage.removeItem('expiresAt')
     setAuthState({})
+    router.push("/")
   }
 
   const isAuthenticated = () => {

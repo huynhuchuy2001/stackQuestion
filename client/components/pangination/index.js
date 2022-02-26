@@ -69,7 +69,7 @@ const Panginations = ({
         <div className="pagein_body">
           <div className="inside">
             {
-              currentPage === 1 || currentPage === 0 ? '' : <i className='bx bxs-left-arrow' num="1" onClick={handleChangePage}></i>
+              currentPage === 1 || currentPage === 0 ? '' : <i className='bx bx-chevrons-left' num="1" onClick={handleChangePage}></i>
             }
             {
               totalPage > range ? currentPage  > range - 1  ? <span className='more_page' onClick={() => handlePage(1)}>1</span>:'':''
@@ -89,7 +89,7 @@ const Panginations = ({
               totalPage > range ? currentPage + 2 < totalPage ? <span className='totalPage more_page' onClick={() => handlePage(totalPage)}>{totalPage}</span>:'':''
             }
             {            
-              currentPage === totalPage || totalPage === 0 ? '' : <i className='bx bxs-right-arrow' num="2" onClick={handleChangePage}></i>
+              currentPage === totalPage || totalPage === 0 ? '' : <i className='bx bx-chevrons-right' num="2" onClick={handleChangePage}></i>
             }
 
           </div>
