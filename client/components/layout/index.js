@@ -20,7 +20,7 @@ const Layout = ({ extra = true, children }) => {
         <div className={cn(styles.body, !extra && styles.main)}>
           {size.width > CONST.MOBILE_SIZE && <Sidebar />}
           <Main>{children}</Main>
-          {size.width > CONST.TABLET_SIZE && extra && <Extra />}
+       {/*    {size.width > CONST.TABLET_SIZE && extra && <Extra />} */}
         </div>
       </div>
     </div>

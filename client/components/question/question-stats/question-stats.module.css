@@ -1,8 +1,8 @@
 .container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-around;
-  width: 58px;
+  width: 159px;
   margin-right: 12px;
   color: var(--black-500);
   font-size: 11px;
@@ -14,9 +14,9 @@
 }
 
 .vote {
-  width: 58px;
+  width: 53px;
   text-align: center;
-
+  margin: auto;
   span {
     font-size: 20px;
     color: var(--black-500);
@@ -24,17 +24,33 @@
 }
 
 .answer {
-  width: 58px;
+  margin: auto;
+  width: 53px;
   text-align: center;
-  margin-bottom: 5px;
 
+  
   span {
     font-size: 20px;
     color: var(--black-500);
   }
 }
-
-.view {
-  padding-top: 10px;
+.highlight_answer{
+  border: 1px solid #3ACE48 ;
+  border-radius: 8px;
+  margin: auto;
+  width: 53px;
   text-align: center;
+  span {
+    font-size: 20px;
+    color: var(--black-500);
+  }
+}
+.view {
+  margin: auto;
+  width: 53px;
+  text-align: center;
+  span {
+    font-size: 20px;
+    color: var(--black-500);
+  }
 }
