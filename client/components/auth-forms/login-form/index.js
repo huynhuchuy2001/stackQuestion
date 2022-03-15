@@ -25,6 +25,7 @@ const LoginForm = () => {
         try {
           const { data } = await publicFetch.post('authenticate', values)
           const { token, expiresAt, userInfo } = data
+          console.log(data)
           setAuthState({ token, expiresAt, userInfo })
           resetForm({})
           setIsComponentVisible(false)

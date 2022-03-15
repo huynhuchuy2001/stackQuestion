@@ -12,8 +12,13 @@ const UserAvatar = ({ username }) => {
   const [userInfo, setUserInfo] = useState(null)
 
   useEffect(() => {
+    var request = {
+      params :{
+        username: username
+      }
+    }
     const fetchUser = async () => {
-      const { data } = await publicFetch.get(`/user/${username}`)
+      const { data } = await publicFetch.get(`/user/find`,request)
       setUserInfo(data)
     }
 

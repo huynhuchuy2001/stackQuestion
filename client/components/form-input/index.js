@@ -12,7 +12,7 @@ const FormInput = ({
   errorMessage,
   ...props
 }) => {
- 
+
   return (
     <div className={styles.container}>
       <label id={label} className={styles.label}>
@@ -23,6 +23,7 @@ const FormInput = ({
             className={cn(styles.input, hasError && styles.hasError)}
             htmlFor={label}
             {...props}
+            
           />
           {hasError && <Alert className={styles.alert} />}
         </div>

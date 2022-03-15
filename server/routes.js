@@ -4,7 +4,9 @@ const {
   authenticate,
   listUsers,
   search,
-  find
+  find,
+  sendMail,
+  upDatePassword
 } = require('./controllers/users');
 const {
   loadQuestions,
@@ -42,7 +44,11 @@ router.post('/authenticate', validateUser, authenticate);
 //users
 router.get('/users', listUsers);
 router.get('/users/:search', search);
-router.get('/user/:username', find);
+router.get('/user/find', find);
+router.post('/user/sendEmail',sendMail);
+router.put('/user/upDatePass',upDatePassword);
+
+
 
 //questions
 router.param('question', loadQuestions);

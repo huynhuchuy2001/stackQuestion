@@ -19,7 +19,7 @@ const SignupForm = () => {
 
   return (
     <Formik
-      initialValues={{ username: '', password: '', passwordConfirmation: '' }}
+      initialValues={{email: '', username: '', password: '', passwordConfirmation: '' }}
       onSubmit={async (values, { setStatus, resetForm }) => {
         setLoading(true)
         try {
@@ -34,6 +34,11 @@ const SignupForm = () => {
         setLoading(false)
       }}
       validationSchema={Yup.object({
+        email:Yup.string()
+        .required('Required')
+        .matches(
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        ),
         username: Yup.string()
           .required('Required')
           .max(16, 'Must be at most 16 characters long')
@@ -59,6 +64,17 @@ const SignupForm = () => {
         isSubmitting
       }) => (
         <form onSubmit={handleSubmit} className={styles.form}>
+          <FormInput
+            label="Email"
+            type="text"
+            name="email"
+            autoComplete="off"
+            value={values.email}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            hasError={touched.email && errors.email}
+            errorMessage="Email invalid"
+          />
           <FormInput
             label="Username"
             type="text"

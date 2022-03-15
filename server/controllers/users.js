@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const jwtDecode = require('jwt-decode');
+const nodeMailer = require("nodemailer");
 const { body, validationResult } = require('express-validator');
 
 const { createToken, hashPassword, verifyPassword } = require('../utils/authentication');
@@ -12,29 +13,82 @@ const getPagination = (page, size, data) => {
   const pagePer = Math.ceil(data.length / size);
   return { dataInPer, pagePer };
 };
+exports.sendMail = (req, res) => {
+  //guesswhoisthis111222@gmail.com
+  const adminEmail = "dinhhaiduongsoma@gmail.com";
+  const adminPassword = "sotuxeeusstaossp";
+  const mailHost = "smtp.gmail.com";
+  /*   const to = req.params.email;
+    const subject = req.params.subject;
+    const htmlContent = req.params.htmlContent; */
+  const { email, subject, htmlContent } = req.body;
 
+  const mailPort = 25;
+
+  const transporter = nodeMailer.createTransport({
+    host: mailHost,
+    port: mailPort,
+    secure: false,
+    auth: {
+      user: adminEmail,
+      pass: adminPassword,
+    },
+    tls: {
+      rejectUnauthorized: false
+    }
+
+  });
+
+  const options = {
+    from: adminEmail,
+    to: email,
+    subject: subject,
+    html: htmlContent,
+  };
+  console.log(options)
+
+  transporter.sendMail(options, function (err, data) {
+    if (err) {
+      console.log(err)
+    } else {
+      res.send({
+        message: "Mã đã được gửi vui lòng vào mail để xác nhận",
+      });
+      console.log("mail has sent")
+    }
+
+  })
+  /*  return transporter.sendMail(options); */
+};
 exports.signup = async (req, res) => {
   const result = validationResult(req);
-  
+
   if (!result.isEmpty()) {
     const errors = result.array({ onlyFirstError: true });
     return res.status(422).json({ errors });
   }
 
   try {
-    const { username } = req.body;
+    const { username, email } = req.body;
 
     const hashedPassword = await hashPassword(req.body.password);
 
     const userData = {
+      email: email,
       username: username.toLowerCase(),
       password: hashedPassword
     };
-
+    const existingEmail = await User.findOne({
+      email: userData.email
+    });
     const existingUsername = await User.findOne({
       username: userData.username
     });
-
+    if (existingEmail) {
+      return res.status(400).json({
+        message: 'Email already exists.'
+      });
+    }
     if (existingUsername) {
       return res.status(400).json({
         message: 'Username already exists.'
@@ -126,12 +180,13 @@ exports.listUsers = async (req, res, next) => {
     const { sortType = '-created' } = req.body;
     const users = await User.find().sort(sortType);
     const { page, size } = req.query;
+
     const { dataInPer, pagePer } = getPagination(page, size, users);
-        res.json({
-          currentPage: Number(page),
-          pageNum: pagePer,
-          user: dataInPer
-        });
+    res.json({
+      currentPage: Number(page),
+      pageNum: pagePer,
+      user: dataInPer
+    });
   } catch (error) {
     next(error);
   }
@@ -154,8 +209,73 @@ exports.search = async (req, res, next) => {
 
 exports.find = async (req, res, next) => {
   try {
-    const users = await User.findOne({ username: req.params.username });
-    res.json(users);
+    const { username, email } = req.query;
+
+
+    if (username) {
+      const users = await User.findOne({ username: username });
+      res.json(users);
+
+    } else if (email) {
+      const users = await User.findOne({ email: email });
+
+      /*   const {email, username, role, _id, created, profilePhoto } = users;   */
+
+      const userInfo = {
+        email: users.email,
+        username: users.username,
+        role: users.role,
+        id: users.id,
+        created: users.created,
+        profilePhoto: users.profilePhoto
+      };
+
+      res.json({ userInfo });
+    }
+
+  } catch (error) {
+    next(error);
+  }
+};
+exports.upDatePassword = async (req, res, next) => {
+  try {
+    const { id, newPassword } = req.body;
+    const hashedPassword = await hashPassword(newPassword);
+
+    console.log(hashedPassword)
+    const user = await User.findByIdAndUpdate(id, { password: hashedPassword }, { upsert: true })
+
+    console.log(user)
+    if (user) {
+      const token = createToken(user);
+      const decodedToken = jwtDecode(token);
+      const expiresAt = decodedToken.exp;
+      const { email, username, role, _id, created, profilePhoto } = user;
+
+      const userInfo = {
+        email: email,
+        username: username,
+        role: role,
+        id: id,
+        created: created,
+        profilePhoto: profilePhoto
+      };
+
+      return res.json({
+        message: 'User updated!',
+        token,
+        userInfo,
+        expiresAt
+      });
+    } else {
+      return res.status(400).json({
+        message: 'There was a problem updating your account.'
+      });
+    }
+
+
+
+
   } catch (error) {
     next(error);
   }
