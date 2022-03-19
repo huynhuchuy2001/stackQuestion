@@ -1,6 +1,7 @@
 import React, { useEffect, useContext,useState } from 'react'
 import Link from 'next/link'
 import cn from 'classnames'
+
 import { useRouter } from "next/router";
 import useComponentVisible from '../../../hooks/useComponentVisible'
 import useWindowSize from '../../../hooks/useWindowSize'
@@ -13,6 +14,7 @@ import NavigationDropdown from '../../navigation-dropdown'
 import { Menu, Close, Logo } from '../../icons'
 
 import styles from './header.module.css'
+import { ro } from 'date-fns/locale';
 
 const Header = ({ className, ...props }) => {
   const router = useRouter();
@@ -33,29 +35,57 @@ const Header = ({ className, ...props }) => {
       setIsComponentVisible(false)
     }
   }, [size])
-  
+  useEffect(()=>{
+    if(router.query.tag){
+      setContentInput("[" + router.query.tag + "]")
+    }else{
+      setContentInput(router.query.tag)
+    }
+   
+  },[router.query.tag])
 /*   const showOption = async () => {
       /* const {data} = await publicFetch.get(`/question/${}`) */
 /*     console.log("sds")
   } */ 
   const handleInput = (e) =>{
-    setContentInput(e.target.value)
-    
+    setContentInput(e.target.value)   
+
   }
+ 
   const handleSubmit = async (e) =>{
     e.preventDefault()
     if(contentInput !== ''){
-      router.push({
-        pathname:'/',
-        query:{
-          keyWord:contentInput
-        }
-      })
+      if(contentInput[0] === '[' && contentInput[contentInput.length - 1] === ']')
+      {
+        const tags = contentInput.replace("[","");
+         const y = tags.replace("]",""); 
+         router.push({
+          pathname:'/',
+          query:{
+            tag:y
+          }
+        }) 
+    
+      }else{
+        router.push({
+          pathname:'/',
+          query:{
+            keyWord:contentInput
+          }
+        })
+      }
+     
     }else{
       router.push("/")
     }
    
     
+  }
+  const handleShowOptionns = () =>{
+    
+    const options = document.getElementById("options");
+      options.classList.add(styles.show_opttions)
+      console.log(window.Event)
   }
   return (
     <header className={cn(styles.header, className)} {...props}>
@@ -74,12 +104,17 @@ const Header = ({ className, ...props }) => {
             ss<span>overflow</span>
           </p>
         </Button>
-        <div style={{ flex: 1, marginRight: 5, marginLeft: 5 }}>
+        <div className={styles.search_qt} style={{ flex: 1, marginRight: 5, marginLeft: 5 }}>
           <form onSubmit={handleSubmit}>
-             <input className={styles.findBox} type='text' onChange={handleInput}/*  onClick={() => {showOption()}} */ />
+             <input className={styles.findBox} id="find" type='text' onChange={handleInput} value={contentInput} onClick={handleShowOptionns} /*  onClick={() => {showOption()}} */ placeholder="[tags] search"/>
           </form>
              
-         
+         <div className={styles.keyWord} id="options">          
+              <ul>
+                <li>"[tags]" search with tag</li>
+                <li>"[tags]" search with tag</li>
+              </ul>
+         </div>
          
         </div>
 

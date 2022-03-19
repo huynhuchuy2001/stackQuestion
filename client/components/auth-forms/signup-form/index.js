@@ -64,6 +64,17 @@ const SignupForm = () => {
         isSubmitting
       }) => (
         <form onSubmit={handleSubmit} className={styles.form}>
+           <FormInput
+            label="Email"
+            type="text"
+            name="email"
+            autoComplete="off"
+            value={values.email}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            hasError={touched.email && errors.email}
+            errorMessage="Email Invalid"
+          />
           <FormInput
             label="Email"
             type="text"
