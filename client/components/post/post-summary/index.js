@@ -42,7 +42,7 @@ const PostSummary = ({
 
   return (
     <div className={styles.postCell}>
-      <div className={styles.text}>{children}</div>
+      <div className={styles.text} dangerouslySetInnerHTML={{ __html: children}}></div>
       <div className={styles.footer}>
         <div className={styles.row}>
           <div className={styles.tagContainer}>

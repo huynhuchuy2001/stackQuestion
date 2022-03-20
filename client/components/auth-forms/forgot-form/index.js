@@ -27,13 +27,11 @@ const ForgotForm = () => {
     return re;
   }
   return (
-    <>
-      
+    <>   
           <Formik
             initialValues={{ email: '' }}
             onSubmit={async (values, { setStatus, resetForm }) => {
               setLoading(true)
-
               try {
                 var request = {
                   params: {

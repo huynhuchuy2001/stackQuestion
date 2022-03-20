@@ -13,19 +13,22 @@ exports.loadAnswers = async (req, res, next, id) => {
 };
 
 exports.createAnswer = async (req, res, next) => {
-  const result = validationResult(req);
+
+   const result = validationResult(req);
+ 
   if (!result.isEmpty()) {
+   
     const errors = result.array({ onlyFirstError: true });
     return res.status(422).json({ errors });
-  }
+  } 
 
   try {
     const { id } = req.user;
     const { text } = req.body;
+  
+     const question = await req.question.addAnswer(id, text);
 
-    const question = await req.question.addAnswer(id, text);
-
-    res.status(201).json(question);
+    res.status(201).json(question); 
   } catch (error) {
     next(error);
   }
@@ -50,8 +53,8 @@ exports.answerValidate = [
     .notEmpty()
     .withMessage('cannot be blank')
 
-    .isLength({ min: 30 })
-    .withMessage('must be at least 30 characters long')
+    /* .isLength({ min: 30 })
+    .withMessage('must be at least 30 characters long') */
 
     .isLength({ max: 30000 })
     .withMessage('must be at most 30000 characters long')

@@ -43,6 +43,8 @@
     "postcss-loader": "^3.0.0",
     "postcss-nested": "^4.2.3",
     "prettier": "^2.0.5",
-    "style-loader": "^1.2.1"
+    "style-loader": "^1.2.1",
+    "@ckeditor/ckeditor5-build-classic": "^29.2.0",
+    "@ckeditor/ckeditor5-react": "^3.0.2"
   }
 }

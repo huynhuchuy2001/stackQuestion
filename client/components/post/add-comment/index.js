@@ -1,6 +1,4 @@
 import React, { useState, useContext } from 'react'
-import { Formik } from 'formik'
-import * as Yup from 'yup'
 
 import { FetchContext } from '../../../store/fetch'
 
@@ -17,70 +15,52 @@ const AddComment = ({
 }) => {
   const { authAxios } = useContext(FetchContext)
 
-  const [loading, setLoading] = useState(false)
+
+
+  const [comment, setComment] = useState('');
+  const [status,setStatus] = useState('');
+ 
+
+const handleChangeCM =(event, editor)  =>{ 
+    const data = editor.getData()   
+    setComment(data)
+   
+}
+const handleSubmit = async (e) =>{
+  e.preventDefault();
+  if(comment.length < 1){
+    setStatus("Nội dung không được trống")
+  }else{  
+    const { data } = await authAxios.post(
+      `/comment/${questionId}/${answerId ? answerId : ''}`,
+      {comment: comment}
+    )
+    setQuestion(data)
+    setShowAddComment(false)
+  }
+}
 
   return (
-    <Formik
-      initialValues={{ comment: '' }}
-      onSubmit={async (values, { setStatus, resetForm }) => {
-        setLoading(true)
-        try {
-          const { data } = await authAxios.post(
-            `/comment/${questionId}/${answerId ? answerId : ''}`,
-            values
-          )
-
-          setQuestion(data)
-
-          resetForm({})
-          setShowAddComment(false)
-        } catch (error) {
-          setStatus(error.response.data.message)
-        }
-        setLoading(false)
-      }}
-      validationSchema={Yup.object({
-        comment: Yup.string()
-          .required('Comment is missing.')
-          .min(5, 'Comment must be at least 5 characters.')
-          .max(1000, 'Comment cannot be longer than 1000 characters.')
-      })}
-    >
-      {({
-        values,
-        errors,
-        touched,
-        status,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        isSubmitting
-      }) => (
+    
         <form className={styles.container} onSubmit={handleSubmit}>
-          <TextArea
-            name="comment"
-            autoComplete="off"
-            value={values.comment}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            hasError={touched.comment && errors.comment}
-            errorMessage={errors.comment && errors.comment}
-          />
+          <TextArea                 
+             onChange={handleChangeCM}                 
+            className={styles.textarea}       
+          /> 
+           
           <p className={styles.status}>{status}</p>
           <div>
             <Button
               className={styles.button}
               type="submit"
               primary
-              isLoading={loading}
-              disabled={isSubmitting}
+              
             >
               Add Comment
             </Button>
           </div>
         </form>
-      )}
-    </Formik>
+     
   )
 }
 

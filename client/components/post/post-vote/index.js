@@ -13,7 +13,7 @@ const PostVote = ({ score, votes, questionId, answerId, setQuestion }) => {
   const { authState, isAuthenticated } = useContext(AuthContext)
   const { authAxios } = useContext(FetchContext)
   const { handleComponentVisible } = useContext(ModalContext)
-
+   
   const isUpVoted = () => {
     return votes.find((v) => v.user === authState.userInfo?.id)?.vote === 1
   }
@@ -28,7 +28,7 @@ const PostVote = ({ score, votes, questionId, answerId, setQuestion }) => {
     )
     setQuestion(data)
   }
-
+  console.log(isUpVoted())
   const downVote = async () => {
     const { data } = await authAxios.get(
       `/votes/downvote/${questionId}/${answerId ? answerId : ''}`

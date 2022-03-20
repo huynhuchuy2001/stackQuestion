@@ -23,12 +23,12 @@ const QuestionDetail = ({ questionId, title }) => {
     const fetchQuestion = async () => {
       const { data } = await publicFetch.get(`/question/${questionId}`)
       setQuestion(data)
-      console.log(data)
+     
     }
 
     fetchQuestion()
   }, [])
-  
+
   const handleSorting = () => {
     switch (answerSortType) {
       case 'Votes':
@@ -51,7 +51,7 @@ const QuestionDetail = ({ questionId, title }) => {
         <link rel="canonical" href={isClient && window.location.href}></link>
       </Head>
 
-      <PageTitle title={title} button />
+      <PageTitle title={question ? question.title : ''} button />
 
       <DetailPageContainer>
         {!question && (
@@ -59,7 +59,7 @@ const QuestionDetail = ({ questionId, title }) => {
             <Spinner />
           </div>
         )}
-
+ 
         {question && (
           <>
             <PostWrapper borderBottom={false}>
@@ -79,6 +79,7 @@ const QuestionDetail = ({ questionId, title }) => {
               </PostSummary>
               <CommentList questionId={questionId} setQuestion={setQuestion}>
                 {question.comments.map(({ id, author, created, body }) => (
+                  
                   <CommentItem
                     key={id}
                     commentId={id}
@@ -87,6 +88,7 @@ const QuestionDetail = ({ questionId, title }) => {
                     isOwner={author.username === question.author.username}
                     created={created}
                     setQuestion={setQuestion}
+                    
                   >
                     {body}
                   </CommentItem>
@@ -133,6 +135,7 @@ const QuestionDetail = ({ questionId, title }) => {
                           isOwner={author.username === question.author.username}
                           created={created}
                           setQuestion={setQuestion}
+                     
                         >
                           {body}
                         </CommentItem>
@@ -156,6 +159,7 @@ const QuestionDetail = ({ questionId, title }) => {
 }
 
 export async function getServerSideProps(context) {
+  
   const slug = context.params.slug
   const questionId = slug.split('-').shift()
   const title = slug

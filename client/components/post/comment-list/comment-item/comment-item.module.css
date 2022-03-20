@@ -6,6 +6,7 @@
   p {
     display: inline;
     word-break: break-word;
+    margin-right:10px;
   }
 
   &:first-child {

@@ -18,9 +18,6 @@ exports.sendMail = (req, res) => {
   const adminEmail = "dinhhaiduongsoma@gmail.com";
   const adminPassword = "sotuxeeusstaossp";
   const mailHost = "smtp.gmail.com";
-  /*   const to = req.params.email;
-    const subject = req.params.subject;
-    const htmlContent = req.params.htmlContent; */
   const { email, subject, htmlContent } = req.body;
 
   const mailPort = 25;

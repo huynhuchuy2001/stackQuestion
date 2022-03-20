@@ -44,7 +44,7 @@ questionSchema.methods = {
       } else {
         //change vote
         this.score += vote;
-        existingVote.vote = vote;
+        existingVote.vote = vote;     
       }
     } else if (vote !== 0) {
       // new vote

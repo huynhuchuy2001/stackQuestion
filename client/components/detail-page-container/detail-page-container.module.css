@@ -11,6 +11,6 @@
   @media (--t) {
     padding-left: 24px;
     padding-right: 0;
-    grid-template-columns: 1fr 250px;
+    grid-template-columns: 1fr;
   }
 }

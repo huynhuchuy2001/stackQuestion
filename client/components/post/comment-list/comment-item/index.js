@@ -17,6 +17,7 @@ const CommentItem = ({
   setQuestion,
   children
 }) => {
+  
   const { authState, isAdmin } = useContext(AuthContext)
   const { authAxios } = useContext(FetchContext)
 
@@ -34,8 +35,9 @@ const CommentItem = ({
   }
 
   return (
-    <div className={styles.commentContainer}>
-      <p>{children} –</p> &nbsp;
+    <div className={styles.commentContainer} >
+     <p dangerouslySetInnerHTML={{ __html: children}}></p>
+     {/*  <p >{children} –</p> &nbsp; */}
       <Link href="/users/[user]" as={`/users/${author}`}>
         <a className={isOwner ? styles.owner : undefined}>{author}</a>
       </Link>
