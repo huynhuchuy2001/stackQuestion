@@ -90,7 +90,10 @@ const Header = ({ className, ...props }) => {
 
   useEffect(() => {
     window.onclick = function (eve) {
-      if (eve.target !== document.getElementById("find") && eve.target !== document.getElementById("options")) {
+   
+      if (eve.target === document.getElementById("find") || eve.target === document.getElementById("options") || eve.target === document.getElementById("optionsItem")) {
+          console.log()
+      }else{
         const options = document.getElementById("options");
         options.classList.remove(styles.show_opttions)
       }
@@ -123,8 +126,8 @@ const Header = ({ className, ...props }) => {
 
          
           <div className={styles.keyWord} id="options">
-            <ul>
-              <li>[tags]: Tìm kiếm theo tag</li>                  
+            <ul >
+              <li id="optionsItem">[tags]: Tìm kiếm theo tag</li>                  
             </ul>
            
           </div>

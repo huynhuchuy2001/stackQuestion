@@ -144,15 +144,16 @@
 .keyWord{
   position: absolute;
   width: 100%;
-  background-color: #F2F3F4 ;
+  background-color: white ;
   box-shadow: 0 4px 4px rgb(0 0 0 / 5%), 0 1px 4px rgb(0 0 0 / 5%), 0 2px 8px rgb(0 0 0 / 5%);
   border-radius: 8px;
   margin-top: 5px;
-  height: 100px;
+  height: max-content;
+  max-height: 100px;
   overflow: hidden;
   overflow: auto;
   visibility: hidden;
-  pointer-events: none;
+ 
 }
 
 .keyWord::-webkit-scrollbar-track
