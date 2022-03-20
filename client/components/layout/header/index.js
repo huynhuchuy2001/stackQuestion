@@ -1,6 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react'
 import Link from 'next/link'
 import cn from 'classnames'
+
 import { useRouter } from "next/router";
 import useComponentVisible from '../../../hooks/useComponentVisible'
 import useWindowSize from '../../../hooks/useWindowSize'
@@ -13,6 +14,7 @@ import NavigationDropdown from '../../navigation-dropdown'
 import { Menu, Close, Logo } from '../../icons'
 
 import styles from './header.module.css'
+
 
 const Header = ({ className, ...props }) => {
   const router = useRouter();
@@ -33,6 +35,7 @@ const Header = ({ className, ...props }) => {
       setIsComponentVisible(false)
     }
   }, [size])
+
   useEffect(() => {
     if (router.query.tag) {
       setContentInput("[" + router.query.tag + "]")
@@ -72,6 +75,7 @@ const Header = ({ className, ...props }) => {
         })
       }
     } else {
+
       router.push("/")
     }
 
@@ -83,6 +87,7 @@ const Header = ({ className, ...props }) => {
     options.classList.add(styles.show_opttions)
    
   }
+
   useEffect(() => {
     window.onclick = function (eve) {
       if (eve.target !== document.getElementById("find") && eve.target !== document.getElementById("options")) {
@@ -92,6 +97,7 @@ const Header = ({ className, ...props }) => {
      
     };
   }, []);
+
   return (
     <header className={cn(styles.header, className)} {...props}>
       <div className={styles.container}>
@@ -110,9 +116,11 @@ const Header = ({ className, ...props }) => {
           </p>
         </Button>
         <div className={styles.search_qt} style={{ flex: 1, marginRight: 5, marginLeft: 5 }}>
+
           <form className={styles.findBoxOut} onSubmit={handleSubmit}>
             <input className={styles.findBox} id="find" type='text' onChange={handleInput} autoComplete="off" value={contentInput} onClick={handleShowOptionns} /*  onClick={() => {showOption()}} */ placeholder="Tìm kiếm ..." />
           </form>
+
          
           <div className={styles.keyWord} id="options">
             <ul>

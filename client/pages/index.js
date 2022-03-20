@@ -32,6 +32,7 @@ const HomePage = () => {
       setQuestions(data.data)
       setTotalPage(data.pageNum)
       setCurrentPage(data.currentPage)
+     
     }
 
     const fetchQuestionByWord = async () => {
@@ -39,8 +40,9 @@ const HomePage = () => {
       setQuestions(data.data)
       setTotalPage(data.pageNum)
       setCurrentPage(data.currentPage)
-  
+      
     }
+
     const fetchQuestionByTag = async () => {
       const { data } = await publicFetch.get(`/questions/${router.query.tag}`)
       setQuestions(data)

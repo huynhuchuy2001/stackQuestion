@@ -40,7 +40,7 @@ const VerifyCode = () => {
     }
     else{
       setTimeLeft("Mã xác nhận đã hết hạn")
-      setRetrieveCodeState(123)
+      setRetrieveCodeState("@sd!4")
     }
   },[timeLeft])
   return (

@@ -67,13 +67,13 @@ exports.signup = async (req, res) => {
 
   try {
     const { username, email } = req.body;
-
     const hashedPassword = await hashPassword(req.body.password);
 
     const userData = {
       email: email,
       username: username.toLowerCase(),
-      password: hashedPassword
+      password: hashedPassword,
+      email: email
     };
     const existingEmail = await User.findOne({
       email: userData.email
@@ -81,14 +81,20 @@ exports.signup = async (req, res) => {
     const existingUsername = await User.findOne({
       username: userData.username
     });
+
     if (existingEmail) {
       return res.status(400).json({
         message: 'Email already exists.'
       });
     }
+
     if (existingUsername) {
       return res.status(400).json({
         message: 'Username already exists.'
+      });
+    }else if(existingEmail){
+      return res.status(400).json({
+        message: 'Email already exists.'
       });
     }
 
@@ -100,10 +106,11 @@ exports.signup = async (req, res) => {
       const decodedToken = jwtDecode(token);
       const expiresAt = decodedToken.exp;
 
-      const { username, role, id, created, profilePhoto } = savedUser;
+      const { username, role, email, id, created, profilePhoto } = savedUser;
       const userInfo = {
         username,
         role,
+        email,
         id,
         created,
         profilePhoto
