@@ -75,17 +75,7 @@ const SignupForm = () => {
             hasError={touched.email && errors.email}
             errorMessage="Email Invalid"
           />
-          <FormInput
-            label="Email"
-            type="text"
-            name="email"
-            autoComplete="off"
-            value={values.email}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            hasError={touched.email && errors.email}
-            errorMessage="Email invalid"
-          />
+         
           <FormInput
             label="Username"
             type="text"

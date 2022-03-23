@@ -9,7 +9,7 @@ exports.upvote = async (req, res) => {
     return res.json(question);
   }
   const question = await req.question.vote(id, 1);
-  console.log(req.question)
+ 
   return res.json(question);
 };
 
@@ -22,7 +22,7 @@ exports.downvote = async (req, res) => {
     return res.json(question);
   }
   const question = await req.question.vote(id, -1);
-  console.log(req.question)
+  
   return res.json(question);
 };
 
@@ -37,3 +37,10 @@ exports.unvote = async (req, res) => {
   const question = await req.question.vote(id, 0);
   return res.json(question);
 };
+exports.chekVote = async (req,res) =>{
+  const {id} = req.user;
+  req.answer.checkeds(id, true);
+  req.question.checkeds(id, true);
+  const question = await req.question.save();
+  return res.json(question);
+}

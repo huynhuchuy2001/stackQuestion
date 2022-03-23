@@ -1,10 +1,12 @@
 .voteCell {
+  position: relative;
   width: auto;
   padding-right: 16px;
   vertical-align: top;
   grid-column: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .voteButton {
@@ -19,7 +21,10 @@
     height: 36px;
   }
 }
-
+.situation{
+  position: absolute;
+  bottom: -40px;
+}
 .voted {
   color: var(--orange) !important;
 }
@@ -31,4 +36,23 @@
   font-size: 21px;
   margin: 2px;
   color: var(--black-500)
+}
+.hide{
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.check{
+  color: var(--black-200) !important;
+  width: 36px;
+  height: 36px;
+}
+.checkVote{
+  color: var(--green) !important;
+}
+
+.hideVote{
+  pointer-events: none;
+  opacity: 0;
+  cursor:none;
 }

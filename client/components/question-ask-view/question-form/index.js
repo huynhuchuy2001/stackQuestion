@@ -8,9 +8,11 @@ import { FetchContext } from '../../../store/fetch'
 import Button from '../../button'
 import Textarea from '../../textarea'
 import FormInput from '../../form-input'
-import TagInput from '../../tag-input'
+/* import TagInput from '../../tag-input' */
+import TagInputV2 from '../../tag-input/tagInput'
 
 import styles from './question-form.module.css'
+
 
 const QuestionForm = () => {
   const router = useRouter()
@@ -18,15 +20,48 @@ const QuestionForm = () => {
 
   const [loading, setLoading] = useState(false)
 
+
+  const[contentBo,setContentBo] = useState('');
+  const[errMessBo,setErrMessBo] = useState('');
+  const[errMessTag,setErrMessTag] = useState('');
+  const[tagsSelect,setTagSelect] = useState(null)
+
+  
+const handleChangeCM = (event, editor)  =>{ 
+  const data = editor.getData();  
+  setContentBo(data)
+}
+
+const selectedTags = (tags) => {
+  setTagSelect(tags);
+};
+
   return (
     <Formik
       initialValues={{ title: '', text: '', tags: [] }}
       onSubmit={async (values, { setStatus, resetForm }) => {
         setLoading(true)
         try {
-          await authAxios.post('questions', values)
-          resetForm({})
-          router.push('/')
+          var title = values.title;
+          var tags = tagsSelect;
+          var req = {
+            title,
+            text: contentBo,
+            tags
+          }
+          if(contentBo.length > 30 ){
+            await authAxios.post('questions',req)
+            resetForm({})
+            router.push('/')
+          }else{
+            setErrMessBo("Nội dung phải lớn hơn 30 ký tự");
+          }
+          if(tagsSelect === null ){
+            setErrMessTag("Cần ít nhất 1 tag");
+            
+          }
+         
+         
         } catch (error) {
           setStatus(error.response.data.message)
         }
@@ -34,17 +69,11 @@ const QuestionForm = () => {
       }}
       validationSchema={Yup.object({
         title: Yup.string()
-          .required('Title is missing.')
+        .required("Chủ đề còn trống")        
           .max(150, 'Title cannot be longer than 150 characters.')
-          .min(15, 'Title must be at least 15 characters.'),
-        text: Yup.string()
-          .required('Body is missing.')
-          .min(30, 'Body must be at least 30 characters.')
-          .max(30000, 'Body cannot be longer than 30000 characters.'),
-        tags: Yup.array()
-          .required('Please enter at least one tag.')
-          .max(5, 'Please enter no more than 5 tags.')
-          .of(Yup.string().max(15, 'Tag cannot be longer than 15 characters. '))
+          .min(15, 'Chủ đề phải lớn hơn 15 ký tự.'),
+         
+       
       })}
     >
       {({
@@ -53,7 +82,7 @@ const QuestionForm = () => {
         touched,
         status,
         handleChange,
-        setFieldValue,
+      
         handleBlur,
         handleSubmit,
         isSubmitting
@@ -61,8 +90,8 @@ const QuestionForm = () => {
         <form onSubmit={handleSubmit}>
           <div className={styles.container}>
             <FormInput
-              label="Title"
-              inputInfo="Be specific and imagine you’re asking a question to another person"
+              label="Chủ đề"
+              inputInfo="Hãy nêu rõ chủ đề mà bạn muốn hỏi"
               type="text"
               name="title"
               autoComplete="off"
@@ -71,30 +100,35 @@ const QuestionForm = () => {
               onBlur={handleBlur}
               hasError={touched.title && errors.title}
               errorMessage={errors.title && errors.title}
-              placeholder="e.g Is there an R function for finding the index of an element in a vendor?"
+              placeholder="e.g Làm sao để đóng học phí"
             />
-            <Textarea
-              label="Body"
-              inputInfo="Include all the information someone would need to answer your question"
-              name="text"
-              autoComplete="off"
-              value={values.text}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              hasError={touched.text && errors.text}
-              errorMessage={errors.text && errors.text}
+            <Textarea           
+             autoComplete="off"           
+              onChange={handleChangeCM}                      
+              errorMessage={errMessBo}
+              label="Nội dung"
+              inputInfo="Bày tỏ một cách rõ ràng về vấn đề chính của bạn"
             />
-            <TagInput
+           {/*  <TagInput
               label="Tags"
               inputInfo="Add up to 5 tags to describe what your question is about"
               type="text"
               name="tags"
               value={values.tags}
-              onChange={(e) => setFieldValue('tags', e, true)}
+              onChange={(e) => {
+                console.log(e)
+                setFieldValue('tags', e, true)
+              }}
               onBlur={handleBlur}
               hasError={touched.tags && errors.tags}
               errorMessage={errors.tags && errors.tags}
-            />
+            /> */}
+            <TagInputV2
+              selectedTags={selectedTags}  
+              label="Tags"
+              inputInfo="Thêm ít nhất một tag để làm rõ câu hỏi của bạn"
+              errorMessage={errMessTag}
+              />
           </div>
           <div className={styles.buttonContainer}>
             <p className={styles.status}>{status}</p>

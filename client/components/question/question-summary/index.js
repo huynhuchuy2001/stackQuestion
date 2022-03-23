@@ -21,7 +21,7 @@ const QuestionSummary = ({
       <Link href="/questions/[slug]" as={`/questions/${id}-${slug(title)}`}>
         <a className={styles.link}>{title}</a>
       </Link>
-      <div className={styles.excerpt}>{children}</div>
+      <div className={styles.excerpt} dangerouslySetInnerHTML={{__html:children}}></div>
       <div className={styles.footer}>
         <div className={styles.tagContainer}>
           {tags.map((tag) => (

@@ -8,9 +8,12 @@ const TextArea = ({
 
   /*  hasError,
    errorMessage, */
+   label,
+   inputInfo,
+   errorMessage,
   ...props
 }) => {
-
+  
   const editorRef = useRef();
   const [editorLoaded, setEditorLoaded] = useState(false)
   const { CKEditor, ClassicEditor } = editorRef.current || {}
@@ -27,19 +30,17 @@ const TextArea = ({
   return (
     <div className={styles.container}>
 
-      {/*  {label && <label className={styles.label}>{label}</label>}
+      {label && <label className={styles.label}>{label}</label>}
       {inputInfo && <p className={styles.inputInfo}>{inputInfo}</p>}
-      <textarea
-        className={cn(styles.textarea, className, hasError && styles.hasError)}
-        {...props}
-      /> */}
       {editorLoaded ? <> <CKEditor
 
         editor={ClassicEditor}
         config={{
           placeholder: 'Hãy viết gì đó ...',
-          toolbar: ['heading', '|', 'bold', 'italic', 'link'],
+          toolbar: ['heading', '|', 'bold', 'italic', 'link','numberedList'],
+          uiColor :'#902C17 '
            }
+         
         }
         onReady={(editor) => {
           // You can store the "editor" and use when it is needed.
@@ -58,6 +59,7 @@ const TextArea = ({
         : <p>Carregando...</p>
       }
       {/*   {hasError && <p className={styles.errorMessage}>{errorMessage}</p>}    */}
+      {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>} 
     </div>
   )
 }

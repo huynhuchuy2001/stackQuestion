@@ -14,7 +14,8 @@ const answerSchema = new Schema({
   text: { type: String, required: true },
   score: { type: Number, default: 0 },
   votes: [voteSchema],
-  comments: [commentSchema]
+  comments: [commentSchema],
+  check:{type: Boolean,default: false}
 });
 
 answerSchema.set('toJSON', { getters: true });
@@ -41,7 +42,10 @@ answerSchema.methods = {
     }
     return this;
   },
-
+  checkeds: function (user,check){
+    this.check= check;
+    return this;
+  },
   addComment: function (author, body) {
     this.comments.push({ author, body });
     return this;

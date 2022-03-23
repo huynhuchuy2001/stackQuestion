@@ -27,7 +27,7 @@ const {
   removeAnswer
 } = require('./controllers/answers');
 const { listPopulerTags, searchTags, listTags } = require('./controllers/tags');
-const { upvote, downvote, unvote } = require('./controllers/votes');
+const { upvote, downvote, unvote,chekVote } = require('./controllers/votes');
 const { loadComments, validate, createComment, removeComment } = require('./controllers/comments');
 
 const requireAuth = require('./middlewares/requireAuth');
@@ -74,6 +74,7 @@ router.delete('/answer/:question/:answer', [requireAuth, answerAuth], removeAnsw
 router.get('/votes/upvote/:question/:answer?', requireAuth, upvote);
 router.get('/votes/downvote/:question/:answer?', requireAuth, downvote);
 router.get('/votes/unvote/:question/:answer?', requireAuth, unvote);
+router.get('/votes/checkvote/:question/:answer?', requireAuth, chekVote);
 
 //comments
 router.param('comment', loadComments);

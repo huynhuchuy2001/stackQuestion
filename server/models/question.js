@@ -19,7 +19,8 @@ const questionSchema = new Schema({
   comments: [commentSchema],
   answers: [answerSchema],
   created: { type: Date, default: Date.now },
-  views: { type: Number, default: 0 }
+  views: { type: Number, default: 0 },
+  check:{type: Boolean, default: false}
 });
 
 questionSchema.set('toJSON', { getters: true });
@@ -54,7 +55,10 @@ questionSchema.methods = {
 
     return this.save();
   },
-
+  checkeds: function (user,check){
+    this.check= check;
+    return this;
+  },
   addComment: function (author, body) {
     this.comments.push({ author, body });
     return this.save();

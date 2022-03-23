@@ -122,6 +122,7 @@ const HomePage = () => {
               <QuestionStats
                 voteCount={votes.length}
                 answerCount={answers.length}
+                answers={answers}
                 view={views}
               />
               <QuestionSummary

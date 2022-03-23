@@ -40,7 +40,7 @@ const Header = ({ className, ...props }) => {
     if (router.query.tag) {
       setContentInput("[" + router.query.tag + "]")
     } else {
-      setContentInput(router.query.tag)
+      setContentInput('')
     }
 
   }, [router.query.tag])

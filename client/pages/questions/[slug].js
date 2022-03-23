@@ -17,15 +17,18 @@ import { Spinner } from '../../components/icons'
 
 const QuestionDetail = ({ questionId, title }) => {
   const [question, setQuestion] = useState(null)
+  const [idOwner,setIdOwner] = useState(null);
+  const [checkQt,setCheckQt] = useState(false);
   const [answerSortType, setAnswersSortType] = useState('Votes')
 
   useEffect(() => {
     const fetchQuestion = async () => {
       const { data } = await publicFetch.get(`/question/${questionId}`)
-      setQuestion(data)
-     
+      setQuestion(data);
+      setIdOwner(data.author.id);
+      setCheckQt(data.check)
+    
     }
-
     fetchQuestion()
   }, [])
 
@@ -68,6 +71,7 @@ const QuestionDetail = ({ questionId, title }) => {
                 votes={question.votes}
                 questionId={questionId}
                 setQuestion={setQuestion}
+
               />
               <PostSummary
                 tags={question.tags}
@@ -109,7 +113,10 @@ const QuestionDetail = ({ questionId, title }) => {
                       votes={answer.votes}
                       answerId={answer.id}
                       questionId={questionId}
-                      setQuestion={setQuestion}
+                      setQuestion={setQuestion}                    
+                      checkAnswer={answer.check}
+                      check={checkQt}
+                      id={idOwner}
                     />
                     <PostSummary
                       author={answer.author}

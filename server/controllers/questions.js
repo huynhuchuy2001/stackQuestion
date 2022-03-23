@@ -26,13 +26,15 @@ exports.loadQuestions = async (req, res, next, id) => {
 };
 
 exports.createQuestion = async (req, res, next) => {
-  const result = validationResult(req);
+  /* const result = validationResult(req);
+  
   if (!result.isEmpty()) {
     const errors = result.array({ onlyFirstError: true });
     return res.status(422).json({ errors });
-  }
+  } */
   try {
     const { title, tags, text } = req.body;
+      console.log(tags)
     const author = req.user.id;
     const question = await Question.create({
       title,
